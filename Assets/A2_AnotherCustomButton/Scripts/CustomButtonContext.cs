@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 
 public class CustomButtonContext
 {
@@ -12,6 +13,8 @@ public class CustomButtonContext
     private bool _isPressed;
     private bool _isEntered;
     private float _longPressDuration = 1.0f;
+
+    private Stopwatch _stopwatch = new Stopwatch();
 
     /// <summary>
     /// 長押しの時間を設定する
@@ -27,7 +30,8 @@ public class CustomButtonContext
     /// </summary>
     public void SetButtonDown()
     {
-
+        _isPressed = true;
+        _stopwatch.Start();
     }
 
     /// <summary>
@@ -35,7 +39,22 @@ public class CustomButtonContext
     /// </summary>
     public void SetButtonUp()
     {
+        if (_isPressed && _isEntered)
+        {
+            _isPressed = false;
 
+            _stopwatch.Stop();
+            var elapsedSeconds = _stopwatch.ElapsedMilliseconds / 1000f;
+
+            if (elapsedSeconds < _longPressDuration)
+            {
+                OnTapped?.Invoke();
+            }
+            else
+            {
+                OnLongPressed?.Invoke();
+            }
+        }
     }
 
     /// <summary>
@@ -43,7 +62,7 @@ public class CustomButtonContext
     /// </summary>
     public void SetButtonEnter()
     {
-
+        _isEntered = true;
     }
 
     /// <summary>
@@ -51,6 +70,6 @@ public class CustomButtonContext
     /// </summary>
     public void SetButtonExit()
     {
-
+        _isEntered = false;
     }
 }
