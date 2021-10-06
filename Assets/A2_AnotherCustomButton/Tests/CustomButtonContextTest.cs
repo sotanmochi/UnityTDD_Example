@@ -23,6 +23,7 @@ public class CustomButtonContextTest
         {
             _context.OnTapped += () => _eventCount++;
 
+            _context.SetButtonEnter();
             _context.SetButtonDown();
             _context.SetButtonUp();
 
@@ -34,6 +35,7 @@ public class CustomButtonContextTest
         {
             _context.OnTapped += () => _eventCount++;
 
+            _context.SetButtonEnter();
             _context.SetButtonDown();
             _context.SetButtonExit();
             _context.SetButtonUp();
@@ -46,6 +48,7 @@ public class CustomButtonContextTest
         {
             _context.OnTapped += () => _eventCount++;
 
+            _context.SetButtonEnter();
             _context.SetButtonDown();
             _context.SetButtonExit();
             _context.SetButtonEnter();
@@ -60,6 +63,7 @@ public class CustomButtonContextTest
             _context.OnTapped += () => _eventCount++;
             _context.SetLongPressDuration(1.0f);
 
+            _context.SetButtonEnter();
             _context.SetButtonDown();
             await UniTask.Delay(TimeSpan.FromSeconds(1.1f));
             _context.SetButtonUp();
