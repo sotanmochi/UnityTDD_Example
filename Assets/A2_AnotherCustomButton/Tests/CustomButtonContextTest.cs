@@ -71,4 +71,64 @@ public class CustomButtonContextTest
             Assert.That(_eventCount, Is.EqualTo(0));
         });
     }
+
+    class LongPressEventTest
+    {
+        private CustomButtonContext _context;
+        private int _eventCount;
+
+        [SetUp]
+        public void SetUp()
+        {
+            _eventCount = 0;
+            _context = new CustomButtonContext();
+        }
+
+        [UnityTest]
+        public IEnumerator 任意の秒数押し続けたらLongPressイベントが発行される() => UniTask.ToCoroutine(async() => 
+        {
+            var durationSeconds = 2.0f;
+            _context.SetLongPressDuration(durationSeconds);
+            _context.OnLongPressed += () => _eventCount++;
+
+            _context.SetButtonEnter();
+            _context.SetButtonDown();
+            await UniTask.Delay(TimeSpan.FromSeconds(durationSeconds + 0.001f));
+            _context.SetButtonUp();
+
+            Assert.That(_eventCount, Is.EqualTo(1));
+        });
+
+        [UnityTest]
+        public IEnumerator 任意の秒数押し続けていない場合LongPressイベントは発行されない() => UniTask.ToCoroutine(async() =>
+        {
+            var durationSeconds = 2.0f;
+            _context.SetLongPressDuration(durationSeconds);
+            _context.OnLongPressed += () => _eventCount++;
+
+            _context.SetButtonEnter();
+            _context.SetButtonDown();
+            await UniTask.Delay(TimeSpan.FromSeconds(durationSeconds - 0.001f));
+            _context.SetButtonUp();
+
+            Assert.That(_eventCount, Is.EqualTo(0));
+        });
+
+        [UnityTest]
+        public IEnumerator 長押し中に指をずらした場合LongPressイベントは発行されない() => UniTask.ToCoroutine(async() =>
+        {
+            var durationSeconds = 2.0f;
+            _context.SetLongPressDuration(durationSeconds);
+            _context.OnLongPressed += () => _eventCount++;
+
+            _context.SetButtonEnter();
+            _context.SetButtonDown();
+            await UniTask.Delay(TimeSpan.FromSeconds(durationSeconds / 2.0f));
+            _context.SetButtonExit();
+            await UniTask.Delay(TimeSpan.FromSeconds(durationSeconds / 2.0f));
+            _context.SetButtonUp();
+
+            Assert.That(_eventCount, Is.EqualTo(0));
+        });
+    }
 }
