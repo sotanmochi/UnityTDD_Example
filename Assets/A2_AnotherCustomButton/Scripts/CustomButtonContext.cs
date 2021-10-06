@@ -31,6 +31,7 @@ public class CustomButtonContext
     public void SetButtonDown()
     {
         _isPressed = true;
+        OnPressed?.Invoke();
         _stopwatch.Start();
     }
 
@@ -39,6 +40,7 @@ public class CustomButtonContext
     /// </summary>
     public void SetButtonUp()
     {
+        OnReleased?.Invoke();
         if (_isPressed && _isEntered)
         {
             _isPressed = false;
@@ -63,6 +65,10 @@ public class CustomButtonContext
     public void SetButtonEnter()
     {
         _isEntered = true;
+        if (_isPressed)
+        {
+            OnPressed?.Invoke();
+        }
     }
 
     /// <summary>
@@ -71,5 +77,15 @@ public class CustomButtonContext
     public void SetButtonExit()
     {
         _isEntered = false;
+        if (_isPressed)
+        {
+            _stopwatch.Stop();
+            var elapsedSeconds = _stopwatch.ElapsedMilliseconds / 1000f;
+
+            if (elapsedSeconds < _longPressDuration)
+            {
+                OnReleased?.Invoke();
+            }
+        }
     }
 }
