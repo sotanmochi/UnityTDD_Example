@@ -93,7 +93,7 @@ public class CustomButtonContextTest
 
             _context.SetButtonEnter();
             _context.SetButtonDown();
-            await UniTask.Delay(TimeSpan.FromSeconds(durationSeconds + 0.001f));
+            await UniTask.Delay(TimeSpan.FromSeconds(durationSeconds + 0.1f));
             _context.SetButtonUp();
 
             Assert.That(_eventCount, Is.EqualTo(1));
@@ -108,7 +108,7 @@ public class CustomButtonContextTest
 
             _context.SetButtonEnter();
             _context.SetButtonDown();
-            await UniTask.Delay(TimeSpan.FromSeconds(durationSeconds - 0.001f));
+            await UniTask.Delay(TimeSpan.FromSeconds(durationSeconds - 0.1f));
             _context.SetButtonUp();
 
             Assert.That(_eventCount, Is.EqualTo(0));
