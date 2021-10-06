@@ -198,7 +198,6 @@ public class CustomButtonContextTest
             _context.OnPressed += () => _eventCount++;
 
             _context.SetButtonEnter();
-            _context.SetButtonDown();
             _context.SetButtonExit();
 
             Assert.That(_eventCount, Is.EqualTo(0));
@@ -210,6 +209,7 @@ public class CustomButtonContextTest
             _context.OnReleased += () => _eventCount++;
 
             _context.SetButtonEnter();
+            _context.SetButtonExit();
 
             Assert.That(_eventCount, Is.EqualTo(0));
         }
